@@ -1,0 +1,119 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Cmd+Shift+Enter*. 
+
+```{r}
+# read the CSV file for class project 
+stocks <-read.csv("data.csv")
+```
+
+
+```{r}
+# Part 4 ----
+
+# Step 8, Generate 50 simple random samples (with replacement), size = 20
+
+rm(.Random.seed)
+sample(stocks$Close_ETF, 20, replace=TRUE)
+```
+
+```{r}
+# Step 10, Generate 10 simple random samples (with replacement), size = 100 
+sample(stocks$Close_ETF, 100, replace=TRUE)
+```
+
+```{r}
+# Part 5 ----
+
+# Selection of one group from Part 4 Step 10
+
+ETF6 <- c(111.120003, 145.800003, 119.209999, 138.080002, 143.199997, 123.389999, 129.649994, 115.650002, 126.330002,
+          120.389999, 112.440002, 121.690002, 150.529999, 107, 103.629997, 114.199997, 119.779999, 113.220001, 143.75,
+          108.75, 118, 100.110001, 99.949997, 144.020004, 130.619995, 122.550003, 142.050003, 99.440002, 127.440002,
+          114.199997, 119.480003, 133.580002, 144.610001, 120.5, 114.389999, 131.380005, 128.770004, 112.580002,
+          148.669998, 120.230003, 110.75, 123.330002, 130.559998, 128.380005, 140.919998, 115.870003, 110.349998,
+          100.230003, 120.129997, 111.160004, 111.160004, 99.160004, 126.660004, 120.870003, 147.089996, 127.410004,
+          111.120003, 128.630005, 110.199997, 131.360001, 117.300003, 115.989998, 130.279999, 111.199997, 142.339996,
+          123.089996, 99.389999, 120.860001, 118.959999, 119.230003, 117.82, 109.650002, 135.009995, 120.209999,
+          125.760002, 131.869995, 126.230003, 131.130005, 132.139999, 105.040001, 126.300003, 127.82, 121.400002,
+          130.210007, 122.239998, 115.129997, 100.279999, 109.959999, 122.110001, 112.970001, 113.370003, 150.860001,
+          118.089996, 115.099998, 118.099998, 113.389999, 114.589996, 111.919998, 114.589996, 114.230003)
+```
+
+```{r}
+length(ETF6)
+```
+
+```{r}
+# Question 1 - 95% Confidence Intervals 
+a <- mean(ETF6)
+s <- sd(ETF6)
+n <- 100
+error <- qnorm(0.975) * s / sqrt(n)
+left <- a - error 
+right <- a + error 
+left
+right 
+```
+
+```{r}
+# Question 2 - 95% Confidence Intervals
+# Selection of one group from Part 4 Step 8
+ETF26 <- c(117.5, 127.980003, 130.509995, 112.82, 114.25, 128.770004, 141.070007, 113.650002, 123.330002, 144.660004,
+           128.309998, 108.910004, 98.279999, 126.830002, 124.720001, 109.650002, 122.230003, 138.240005, 118.099998,
+           114.389999)
+```
+
+```{r}
+length(ETF26)
+```
+
+```{r}
+# Question 2 - 95% Confidence Intervals 
+
+a1 <- mean(ETF26)
+s1 <- sd(ETF26)
+n1 <- 100
+error1 <- qnorm(0.975) * s1 / sqrt(n1)
+left1 <- a1 - error 
+right1 <- a1 + error 
+left1
+right1 
+```
+The mean from Part 1 = 121.1530. The population mean fits within both sets of confidence intervals. The confidence interval calculated from the data set with n = 100, (119.0775, 123.9601) would be more accurate since it was calculated from a larger data set.
+
+```{r}
+# Part 6 ----
+
+# 1. 2 - sided T-test on Sample Set ETF6, H0: u = 100 at Confidence Level = 95%
+t.test(ETF6, mu = 100)
+```
+
+The t-test result does not support the H0: u = 100 as the p-value is extremely small and < significance level of 0.05. Therefore, the data set's mean, selected in Part 5, Step 1, is not equal to 100.
+
+```{r}
+# 2. 2-sided T-test on Sample Set ETF26, H0: u = 100 at Confidence Level = 95%
+t.test(ETF26, mu = 100)
+```
+
+The t-test result does not support the H0: u = 100 as the p-value is extremely small and < significance level of 0.05. Therefore, the data set's mean, selected in Part 5, Step 2, is not equal to 100.
+
+```{r}
+install.packages("EnvStats")
+library(EnvStats)
+# 3. 2-sided Chi-Squared Test on Sample Set ETF26, sigma = 225 at Confidence Level = 95%
+varTest(ETF26, sigma.squared = 225)
+```
+In order to run the Chi-Squared test, I set the variance to 225 (i.e. 15 x 15) The Chi-Squared Test result supports the H0: σ = 15 as the p-value > significance level.
+
+```{r}
+# 4. 1-sided Chi-Sqaured Test on Sample Set ETF25, sigma = 225 at Conficence Level = 95%
+varTest(ETF26, alternative = "less", sigma.squared = 225)
+```
+
+The Chi-Squared Test result supports the H0: σ = 15 as the p-value > significance level.
