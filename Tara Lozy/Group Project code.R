@@ -121,6 +121,8 @@ R <- residuals(fit)
 # extract predicted values 
 P <- predict(fit)
 
+# Part 10 ----
+
 #Plot residuals vs predicted 
 plot(P, R, ylab = "Residuals", xlab = "Predicted")
 abline(0, 0)
